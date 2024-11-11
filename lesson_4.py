@@ -1,6 +1,5 @@
 from random import randint, choice
 
-
 class GameEntity:
     def __init__(self, name, health, damage):
         self.__name = name
@@ -163,13 +162,13 @@ def is_game_over(boss, heroes):
 
 def start_game():
     boss = Boss(name='Dragon', health=1000, damage=50)
-    warrior_1 = Warrior(name='Mario', health=270, damage=10)
+    # warrior_1 = Warrior(name='Mario', health=270, damage=10)
     warrior_2 = Warrior(name='Ben', health=280, damage=15)
     magic = Magic(name='Merlin', health=290, damage=10)
     berserk = Berserk(name='Guts', health=260, damage=5)
     doc = Medic(name='Aibolit', health=250, damage=5, heal_points=15)
     assistant = Medic(name='Kristin', health=300, damage=5, heal_points=5)
-    heroes_list = [warrior_1, doc, warrior_2, magic, berserk, assistant]
+    heroes_list = [ doc, warrior_2, magic, berserk, assistant]
 
     show_statistics(boss, heroes_list)
     while not is_game_over(boss, heroes_list):
