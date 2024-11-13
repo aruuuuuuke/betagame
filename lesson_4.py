@@ -1,5 +1,6 @@
 from random import randint, choice
 
+
 class GameEntity:
     def __init__(self, name, health, damage):
         self.__name = name
@@ -90,8 +91,9 @@ class Magic(Hero):
         super().__init__(name, health, damage, 'BOOST')
 
     def apply_super_power(self, boss, heroes):
-        pass
-        # TODO Here will be implementation of BOOSTING
+        for hero in heroes:
+            if hero.health > 0:
+                hero.damage += 3
 
 
 class Berserk(Hero):
@@ -123,11 +125,40 @@ class Medic(Hero):
                 hero.health += self.__heal_points
 
 
+class Witcher(Hero):
+    def __init__(self, name, health, damage):
+        super().__init__(name, health, damage, ability='LIFE_CHANCE')
+
+    def attack(self, boss):
+        pass
+
+    def apply_super_power(self, boss, heroes):
+        for hero in heroes:
+            if hero.health <= 0:
+                hero.health = self.health
+                self.health = 0
+                print(f'{self.name} sacrificed their life to revive {hero.name}.')
+
+
+class Hacker(Hero):
+    def __init__(self, name, health, damage):
+        super().__init__(name, health, damage, 'REORDER_DAMAGE')
+
+    def apply_super_power(self, boss, heroes):
+        if round_number % 2 == 0 or round_number == 0:
+            random_steal = randint(3, 10)
+            boss.health -= random_steal
+            random_hero = choice(heroes)
+            if random_hero.health > 0 and self != random_hero:
+                random_hero.health += random_steal
+                print(f"{self.name} revert {random_steal} health to {random_hero.name}")
+
+
 round_number = 0
 
 
 def show_statistics(boss, heroes):
-    print(f'ROUND - {round_number} ------------')
+    print(f'ROUND - {round_number} ---------------')
     print(boss)
     for hero in heroes:
         print(hero)
@@ -161,14 +192,16 @@ def is_game_over(boss, heroes):
 
 
 def start_game():
-    boss = Boss(name='Dragon', health=1000, damage=50)
-    # warrior_1 = Warrior(name='Mario', health=270, damage=10)
+    boss = Boss(name='Dragon', health=1500, damage=50)
+    warrior_1 = Warrior(name='Mario', health=270, damage=10)
     warrior_2 = Warrior(name='Ben', health=280, damage=15)
     magic = Magic(name='Merlin', health=290, damage=10)
     berserk = Berserk(name='Guts', health=260, damage=5)
     doc = Medic(name='Aibolit', health=250, damage=5, heal_points=15)
     assistant = Medic(name='Kristin', health=300, damage=5, heal_points=5)
-    heroes_list = [ doc, warrior_2, magic, berserk, assistant]
+    witcher = Witcher(name='Guty', health=260, damage=10)
+    hacker = Hacker("loly",260,10)
+    heroes_list = [warrior_1, doc, warrior_2, magic, berserk, assistant, witcher, hacker]
 
     show_statistics(boss, heroes_list)
     while not is_game_over(boss, heroes_list):
